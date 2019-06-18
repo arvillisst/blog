@@ -68,10 +68,8 @@ venv_lb/
 .mypy_cache/ 
 
 
-django/static_dev/
 django/media
 
-static_dev/
 media/
 static/
 # Visual Studio Code # 
