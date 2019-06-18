@@ -1,6 +1,4 @@
 from django import forms
-from snowpenguin.django.recaptcha2.fields import ReCaptchaField
-from snowpenguin.django.recaptcha2.widgets import ReCaptchaWidget
 
 class SubscriberForm(forms.Form):
     email = forms.CharField(label='', widget=forms.TextInput(attrs={

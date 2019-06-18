@@ -20,7 +20,6 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from config import settings
 from django.conf import settings
-from g_recaptcha.validate_recaptcha import validate_captcha
 
 
 class HomeView(ListView, CategoryMixin):
