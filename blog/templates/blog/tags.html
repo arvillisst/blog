@@ -1,0 +1,271 @@
+{% extends '_parts/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %}
+    {% for obj in object_list %}
+       {% if forloop.first %}
+            {{ obj.tags.names|first }}
+       {% endif %}
+    {% endfor %}
+    | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    {% include '_parts/header.html' %}
+
+	<!--================Category Area =================-->
+	<section class="category_area section-gap">
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-8">
+					<div class="blog-meta">
+						<a class="read_more" href="/">Главная</a>
+						<span class="lnr lnr-arrow-right"></span>
+						<a class="read_more" href="{{ category.get_absolute_url }}">
+                            {% for obj in object_list %}
+                               {% if forloop.first %}
+                                    {{ obj.tags.names|first }}
+                               {% endif %}
+                            {% endfor %}
+                        </a>
+					</div><br>
+					<div class="row">
+                        {% for article in cats %}
+                            {% if forloop.first %}
+                                <div class="col-lg-12">
+                                    <div class="single_travel wow fadeInUp" data-wow-duration="1s">
+                                        <figure>
+                                            {% if article.image %}
+                                                <img class="img-fluid w-100" src="{% thumbnail article.image 770x320 crop %}" alt="">
+                                            {% endif %}
+                                        </figure>
+                                        <div class="overlay"></div>
+                                        <div class="text-wrap">
+                                            <h3 class="article-title">
+                                                <a href="{{ article.get_absolute_url }}">{{ article.title }} </a>
+                                            </h3>
+                                            <div class="blog-meta white d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="meta">
+                                                    <a href="#">
+                                                        <span class="icon fa fa-calendar"></span> {{ article.created|naturalday }}
+                                                        <span class="icon fa fa-comments"></span> 05
+                                                    </a>
+                                                    <span class="icon fa fa-eye"></span> {{ article.hit_count.hits }}
+                                                </div>
+                                                <div>
+                                                    <a class="read_more" href="{{ article.get_absolute_url }}">Читать</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif forloop.counter == 2 %}
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="single_travel wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                        <figure>
+                                            {% if article.image %}
+                                                <img class="img-fluid w-100" src="{% thumbnail article.image 370x380 crop %}" alt="">
+                                            {% endif %}
+                                        </figure>
+                                        <div class="overlay"></div>
+                                        <div class="text-wrap">
+                                            <h3 class="article-title">
+                                                <a href="{{ article.get_absolute_url }}">{{ article.title }} </a>
+                                            </h3>
+                                            <div class="blog-meta white d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="meta">
+                                                    <a href="#">
+                                                        <span class="icon fa fa-calendar"></span> {{ article.created|naturalday }}
+                                                        <span class="icon fa fa-comments"></span> 05
+                                                    </a>
+                                                    <span class="icon fa fa-eye"></span> {{ article.hit_count.hits }}
+                                                </div>
+                                                <div>
+                                                    <a class="read_more" href="{{ article.get_absolute_url }}">Читать</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+						        </div>
+                            {% elif forloop.counter == 3 %}
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="single_travel wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                        <figure>
+                                            {% if article.image %}
+                                                <img class="img-fluid w-100" src="{% thumbnail article.image 370x380 crop %}" alt="">
+                                            {% endif %}
+                                        </figure>
+                                        <div class="overlay"></div>
+                                        <div class="text-wrap">
+                                            <h3 class="article-title">
+                                                <a href="{{ article.get_absolute_url }}">{{ article.title }} </a>
+                                            </h3>
+                                            <div class="blog-meta white d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="meta">
+                                                    <a href="#">
+                                                        <span class="icon fa fa-calendar"></span> {{ article.created|naturalday }}
+                                                        <span class="icon fa fa-comments"></span> 05
+                                                    </a>
+                                                    <span class="icon fa fa-eye"></span> {{ article.hit_count.hits }}
+                                                </div>
+                                                <div>
+                                                    <a class="read_more" href="{{ article.get_absolute_url }}">Читать</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif forloop.counter == 4 %}
+                                <div class="col-lg-12">
+                                    <div class="single_travel wow fadeInUp" data-wow-duration="1s">
+                                        <figure>
+                                            {% if article.image %}
+                                                <img class="img-fluid w-100" src="{% thumbnail article.image 770x320 crop %}" alt="">
+                                            {% endif %}
+                                        </figure>
+                                        <div class="overlay"></div>
+                                        <div class="text-wrap">
+                                            <h3 class="article-title">
+                                                <a href="{{ article.get_absolute_url }}">{{ article.title }} </a>
+                                            </h3>
+                                            <div class="blog-meta white d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="meta">
+                                                    <a href="#">
+                                                        <span class="icon fa fa-calendar"></span> {{ article.created|naturalday }}
+                                                        <span class="icon fa fa-comments"></span> 05
+                                                    </a>
+                                                    <span class="icon fa fa-eye"></span> {{ article.hit_count.hits }}
+                                                </div>
+                                                <div>
+                                                    <a class="read_more" href="{{ article.get_absolute_url }}">Читать</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif forloop.counter == 5 %}
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="single_travel wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                        <figure>
+                                            {% if article.image %}
+                                                <img class="img-fluid w-100" src="{% thumbnail article.image 370x380 crop %}" alt="">
+                                            {% endif %}
+                                        </figure>
+                                        <div class="overlay"></div>
+                                        <div class="text-wrap">
+                                            <h3 class="article-title">
+                                                <a href="{{ article.get_absolute_url }}">{{ article.title }} </a>
+                                            </h3>
+                                            <div class="blog-meta white d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="meta">
+                                                    <a href="#">
+                                                        <span class="icon fa fa-calendar"></span> {{ article.created|naturalday }}
+                                                        <span class="icon fa fa-comments"></span> 05
+                                                    </a>
+                                                    <span class="icon fa fa-eye"></span> {{ article.hit_count.hits }}
+                                                </div>
+                                                <div>
+                                                    <a class="read_more" href="{{ article.get_absolute_url }}">Читать</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+						        </div>
+                            {% elif forloop.counter == 6 %}
+                                <div class="col-lg-6 col-md-6 col-sm-12">
+                                    <div class="single_travel wow fadeInUp" data-wow-duration="1s" data-wow-delay=".2s">
+                                        <figure>
+                                            {% if article.image %}
+                                                <img class="img-fluid w-100" src="{% thumbnail article.image 370x380 crop %}" alt="">
+                                            {% endif %}
+                                        </figure>
+                                        <div class="overlay"></div>
+                                        <div class="text-wrap">
+                                            <h3 class="article-title">
+                                                <a href="{{ article.get_absolute_url }}">{{ article.title }} </a>
+                                            </h3>
+                                            <div class="blog-meta white d-flex justify-content-between align-items-center flex-wrap">
+                                                <div class="meta">
+                                                    <a href="#">
+                                                        <span class="icon fa fa-calendar"></span> {{ article.created|naturalday }}
+                                                        <span class="icon fa fa-comments"></span> 05
+                                                    </a>
+                                                    <span class="icon fa fa-eye"></span> {{ article.hit_count.hits }}
+                                                </div>
+                                                <div>
+                                                    <a class="read_more" href="{{ article.get_absolute_url }}">Читать</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<nav class="blog-pagination justify-content-center d-flex">
+								<ul class="pagination">
+                                {% if cats.has_other_pages %}
+                                    {% if cats.has_previous %}
+                                        <li class="page-item">
+                                            <a href="?page={{ cats.previous_page_number }}" class="page-link" aria-label="Previous">
+                                                <span aria-hidden="true">
+                                                    <span class="lnr lnr-chevron-left"></span>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                    {% for i in cats.paginator.page_range %}
+                                        {% if cats.number > 6 and forloop.first %}
+                                            <li class="page-item disabled">...</li>
+                                        {% endif %}
+                                        {% if cats.number == i %}
+									        <li class="page-item active"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+                                        {% elif i > cats.number|add:'-6' and i < cats.number|add:'6' %}
+                                            <li class="page-item"><a href="?page={{ i }}" class="page-link">{{ i }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if cats.has_next %}
+                                        <li class="page-item">
+                                            <a href="?page={{ cats.next_page_number }}" class="page-link" aria-label="Next">
+                                                <span aria-hidden="true">
+                                                    <span class="lnr lnr-chevron-right"></span>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+
+                <!--================ Right sidebar  =================-->
+				{% include '_parts/right_sidebar.html' %}
+                <!--================ endright sidebar  =================-->
+			</div>
+		</div>
+	</section>
+	<!--================Category Area =================-->
+
+	<!--================ start footer Area  =================-->
+	{% include '_parts/footer.html' %}
+	<!--================ End footer Area  =================-->
+
+	<!-- ####################### Start Scroll to Top Area ####################### -->
+	<div id="back-top">
+		<a title="Go to Top" href="#">
+			<i class="fa fa-angle-up"></i>
+		</a>
+	</div>
+	<!-- ####################### End Scroll to Top Area ####################### -->
+
+{% endblock %}

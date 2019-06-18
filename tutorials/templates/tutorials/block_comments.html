@@ -1,0 +1,142 @@
+{% load static %}
+{% load humanize %}
+
+<!--================ Comments Area =================-->
+    <div class="comments-area">
+        
+        <h4 id="comment_title_h4"><a href="#" id='hideshow' value='hide/show'>&uarr;&darr; </a> Комментарии: {{ article.comments.count }}</h4>
+        <div id="content">
+        {% for comment in article_comments %}
+            <div class="comment-list">
+                <div class="single-comment justify-content-between d-flex">
+                    <div class="user justify-content-between d-flex">
+                        <div class="thumb">
+                            <i class="fa fa-user"></i>
+                        </div>
+                        <div class="desc">
+                            <h5>{{ comment.name }}</h5>
+                            <p class="date">{{ comment.created|naturalday }} </p>
+                            <p class="comment">
+                                {{ comment.comment }}
+                            </p>
+                            <hr>
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+<!--================End Comments Area =================-->
+<!--================ Reply Area =================-->
+    <div class="comment-form">
+        <h4>Ваш комментарий</h4>
+        <form action="" method="post">
+            <input type="hidden" id="article" data-id="{{ article.id }}">
+            {% csrf_token %}
+            <div class="form-group form-inline">
+                <div class="form-group col-lg-6 col-md-6 name">
+                    {{ form.name }}
+                </div>
+                <div class="form-group col-lg-6 col-md-6 honeypot">
+                    {{ form.honeypot }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.comment }}
+            </div>
+
+            <div id="myAlert" class="alert alert-info collapse">
+            
+            </div>
+
+            <a href="#" class="primary-btn submit_btn" id="add_comment">Отправить</a>
+
+        </form>
+    </div>
+</div>
+<!--================ End Reply Area =================-->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script>
+	// Comments ajax
+    $(document).ready(function () {
+        // $('#content').hide()
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+}
+            var csrftoken = getCookie('csrftoken');
+
+        // show/hide comments
+        $('#hideshow').on('click', function(e) {
+            e.preventDefault()
+            
+            $('#content').toggle('show');
+            
+        });
+
+        $('#add_comment').on('click', function (e) {
+            e.preventDefault()
+            var article_id = $('#article').attr('data-id');
+            var name = $('#name').val();
+            var comment = $('#id_comment').val();
+            var honeypot = $('#id_honeypot').val();
+
+            data = {
+                article_id: article_id,
+                name: name,
+                comment: comment,
+                honeypot: honeypot,
+                csrfmiddlewaretoken: csrftoken
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'tutorial:add_comment_tutorial' %}",
+                dataType: 'json',
+                data: data,
+                success: function (data) {
+                   //  console.log(data)
+                    $.each(data, function (field) {
+
+                        $('#comment_title_h4').after('<div class="comment-list new_comment"></div>');
+
+                        $('.new_comment').prepend(
+                            '<div class="single-comment justify-content-between d-flex"><div class="user justify-content-between d-flex"> <div class="thumb"> <i class="fa fa-user"></i> </div> <div class="desc"> <h5>'+ data[field]['name'] + '</h5> <p class="comment">' + data[field]['comment'] + '</p></div></div></div>'
+                        );
+
+                        $('#id_comment').val('');
+                        $('#name').val('');
+
+                        if (data) {
+                        
+                            $('#myAlert').html('<a href="#" class="close" data-dismiss="alert">&times;</a><p>Сообщение отправлено</p>')
+                            $('#myAlert').show('fade');
+                            setTimeout(function () {
+                                $('#myAlert').hide('fade');
+                            }, 4000)
+                        
+                        } 
+                        //$('#no_comment_title_h4').hide();
+                    })
+                }
+
+            })
+
+        })
+    });
+</script>
+

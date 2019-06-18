@@ -1,0 +1,151 @@
+{% extends '_parts/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+{% block title %} {{ article.title }} | {{ article.category.name }}{% endblock %}
+
+{% block content %}
+
+    {% include '_parts/header.html' %}
+
+    <!--================Blog Area =================-->
+    <section class="blog_area section-gap single-post-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="blog-meta">
+                        <a class="read_more" href="/">Главная</a>
+                        <span class="lnr lnr-arrow-right"></span>
+                        <a class="read_more" href="{{ article.category.get_absolute_url }}">{{ article.category.name }}</a>
+{#                        <span class="lnr lnr-arrow-right"></span>#}
+{#                        <a class="read_more" href="category.html">{{ article.title }}</a>#}
+                    </div><br>
+                    <div class="main_blog_details">
+                        <img class="img-fluid" src="{% thumbnail article.image 770x350 crop %}" alt="">
+                       
+                        <a>
+                            <h4 class="article-title article-detail" id="article" data-id="{{ article.id }}">{{ article.title }}</h4>
+                        </a>
+                        <div class="user_details">
+                            <div class="float-left">
+                                {% for tag in article.tags.all %}
+                                    <a href="{% url 'tagged' tag.slug %}">{{ tag.name }}</a>
+                                {% endfor %}
+                            </div>
+                            <div class="float-right">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h5></h5>
+                                        <p>{{ article.created|naturalday }}</p>
+{#                                        <span class="icon fa fa-eye"></span> {{ article.hit_count.hits }}#}
+                                    </div>
+                                    <div class="d-flex">
+                                        <!-- <img src="{% static 'img/blog/user-img.jpg' %}" alt=""> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p>{{ article.content|safe }}</p>
+                        <div class="news_d_footer">
+
+                            <a href="#" id="like"><span><i class="lnr lnr lnr-heart" id="like-heart"></i></span></a> <span id="liked"> {{ article.likes }}</span>
+
+                            <a class="justify-content-center ml-auto"><i class="lnr lnr lnr-bubble"></i><span id="comments_count">{{ article.comments.count }}</span></a>
+                            <div class="news_socail ml-auto">
+{#                                <span class="icon fa fa-eye">{{ article.hit_count.hits }}</span>#}
+                                <a><i class="fa fa-eye"></i>{{ article.hit_count.hits }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="navigation-area">
+                        <div class="row">
+
+                            <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+                                {% if prev_post %}
+                                <div class="thumb">
+                                    <a href="{{ prev_post.get_absolute_url }}"><img class="img-fluid" src="{% thumbnail prev_post.image 60x60 crop %}" alt=""></a>
+                                </div>
+                                <div class="arrow">
+                                    <a href="{{ prev_post.get_absolute_url }}"><span class="lnr text-white lnr-arrow-left"></span></a>
+                                </div>
+                                <div class="detials">
+                                    <p>Предыдущая</p>
+                                    <a href="{{ prev_post.get_absolute_url }}">
+                                        <h4 class="prev-article">{{ prev_post.title|truncatewords_html:9 }}</h4>
+                                    </a>
+                                </div>
+                                {% endif %}
+                            </div>
+
+
+
+                            <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
+                                {% if next_post %}
+                                <div class="detials">
+                                    <p>Следующая</p>
+                                    <a href="{{ next_post.get_absolute_url }}">
+                                        <h4 class="prev-article">{{ next_post.title|truncatewords_html:10 }}</h4>
+                                    </a>
+                                </div>
+                                <div class="arrow">
+                                    <a href="{{ next_post.get_absolute_url }}"><span class="lnr text-white lnr-arrow-right"></span></a>
+                                </div>
+                                <div class="thumb">
+                                    <a href="{{ next_post.get_absolute_url }}"><img class="img-fluid" src="{% thumbnail next_post.image 60x60 crop %}" alt=""></a>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                <!--================ Comments Area =================-->
+                {% include '_parts/block_comments.html' %}
+                <!--================End Comments Area =================-->
+                <!--================ Right sidebar  =================-->
+				{% include '_parts/right_sidebar.html' %}
+                <!--================ endright sidebar  =================-->
+            </div>
+        </div>
+    </section>
+    <!--================Blog Area =================-->
+    <!--================ start footer Area  =================-->
+    {% include '_parts/footer.html' %}
+    <!--================ End footer Area  =================-->
+    <!-- ####################### Start Scroll to Top Area ####################### -->
+    <div id="back-top">
+        <a title="Go to Top" href="#">
+            <i class="fa fa-angle-up"></i>
+        </a>
+    </div>
+    <!-- ####################### End Scroll to Top Area #######################  -->
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script>
+    $(document).ready(function(){
+        $('#like').on('click', function (e) {
+            e.preventDefault()
+            var like = 'like'
+            var article_id = $('#article').attr('data-id')
+            data = {
+                article_id: article_id,
+                like: like
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'user_reaction' %}",
+                dataType: 'json',
+                data: data,
+                success: function(data){
+                    $('#liked').html(data.likes)
+                    
+                    // console.log(data.likes)
+                }
+            })
+        })
+    });
+</script>
+
+
+
+{% endblock %}

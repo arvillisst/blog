@@ -1,0 +1,202 @@
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+
+<div class="col-lg-4">
+    <div class="blog_right_sidebar">
+        <!--================ Search =================-->
+{#        <aside class="single_sidebar_widget search_widget">#}
+{#            <div class="input-group">#}
+{#                <input type="text" class="form-control" placeholder="Поиск">#}
+{#                <span class="input-group-btn">#}
+{#                    <button class="btn btn-default" type="button"><i class="lnr lnr-magnifier"></i></button>#}
+{#                </span>#}
+{#            </div><!-- /input-group -->#}
+{#            <div class="br"></div>#}
+{#        </aside>#}
+        <!--================ End Search =================-->
+
+        <!--================ Содержание =================-->
+        <aside class="single_sidebar_widget popular_post_widget">
+            <h3 class="widget_title">Содержание</h3>
+            {% for article in art %}
+                <div class="media post_item">
+{#                    {% if article.image %}#}
+{#                        <img src="{% thumbnail article.image 100x60 crop %}" alt="post">#}
+{#                    {% endif %}#}
+                    <div class="media-body">
+                        <a href="{{ article.get_absolute_url }}">
+                            <h3 class="tutorials-single_sidebar_widget">{{ article.title|truncatewords_html:20 }}</h3>
+                        </a>
+{#                        <p>{{ article.created|naturalday }}</p>#}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="br"></div>
+        </aside>
+        <!--================ Конец содержания =================-->
+
+        <!--================ Сейчас обсуждают =================-->
+        {% if order_by_comments %}
+            <aside class="single_sidebar_widget popular_post_widget">
+                <h3 class="widget_title">Самое обсуждаемое</h3>
+                {% for article in order_by_comments %}
+                    {% if article.comments.count > 0 %}
+                        <div class="media post_item">
+                            {% if article.image %}
+                                <img src="{% thumbnail article.image 100x60 crop %}" alt="post">
+                            {% endif %}
+                            <div class="media-body">
+                                <a href="{{ article.get_absolute_url }}">
+                                    <h3 class="article-title-popular">
+                                        {{ article.title|truncatewords_html:6 }}
+                                        <i class="fa fa-comments"></i> {{ article.comments.count }}
+                                    </h3>
+                                </a>
+    {#                            {% for c in article.comments.all %}#}
+    {#                                {% if forloop.first %}#}
+    {#                                    <p>{{ c.created }}</p>#}
+    {#                                {% endif %}#}
+    {#                            {% endfor %}#}
+    {#                            <p>{{ article.created }}</p>#}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+                <div class="br"></div>
+            </aside>
+        {% endif %}
+        <!--================ Сейчас обсуждают =================-->
+
+        <!--================ Популярные =================-->
+        {% if popular_articles %}
+            <aside class="single_sidebar_widget popular_post_widget">
+                <h3 class="widget_title">Популярные</h3>
+                {% for article in popular_articles %}
+                    <div class="media post_item">
+                        {% if article.image %}
+                            <img src="{% thumbnail article.image 100x60 crop %}" alt="post">
+                        {% endif %}
+                        <div class="media-body">
+                            <a href="{{ article.get_absolute_url }}">
+                                <h3 class="article-title-popular">{{ article.title|truncatewords_html:5 }}</h3>
+                            </a>
+                            <p>{{ article.created|naturalday }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="br"></div>
+            </aside>
+        {% endif %}
+        <!--================ Популярные =================-->
+
+        <!--================ Category =================-->
+        <aside class="single_sidebar_widget post_category_widget">
+            <h4 class="widget_title">Категории</h4>
+            <ul class="list cat-list">
+                {% for category in category_from_mixin %}
+                    <li>
+                        <a href="{{ category.get_absolute_url }}" class="d-flex justify-content-between">
+                            <p>{{ category.name }}</p>
+                            <p>{{ category.article_set.count }}</p>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="br"></div>
+        </aside>
+        <!--================ Category =================-->
+
+        <!--================ Теги =================-->
+        <aside class="single-sidebar-widget tag_cloud_widget">
+            <h4 class="widget_title">Теги</h4>
+            <ul class="list">
+                {% for tag in all_tags %}
+                    <li>
+                        <a href="{% url 'tagged' tag.slug %}">{{ tag.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="br"></div>
+        </aside>
+        <!--================ Теги =================-->
+
+        <!--================ Подписаться =================-->
+        <aside class="single_sidebar_widget newsletter_widget" id="aside-widget">
+                <h4 class="widget_title">Подписаться на новости</h4>
+                <div id="mc_embed_signup">
+                    <form action="{% url 'subscribe_news' %}" method="post" class="subscribe_form relative">
+                        {% csrf_token %}
+                        <div class="input-group d-flex flex-row">
+                            {{ form_subscr }}
+                            <button type="submit" class="btn sub-btn" id="btn-subscribe" >
+                                <span class="lnr lnr-arrow-right"></span>
+                            </button>
+                        </div>
+                        <div class="mt-10 info"></div>
+                    </form>
+                </div>
+            </aside>
+            
+            
+            <div id="myAlert" class="alert alert-info collapse">
+                
+            </div>
+            
+            <div class="br"></div>
+            <!--================ Подписаться =================-->
+        </div>
+    </div>
+    
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script>
+        // Подписка на новости
+        $(document).ready(function () {
+            $('#btn-subscribe').on('click', function (e) {
+                e.preventDefault();
+    
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "subscribe_news" %}',
+                    // contentType: "application/json",
+                    data: {
+                        email: $('#id_email').val(),
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function (data) {
+                        $('#id_email').val('');
+                        console.log(data)
+                        
+                        if (data.added) {
+                            console.log('email был успешно добавлен')
+                            $('#myAlert').html('<a href="#" class="close" data-dismiss="alert">&times;</a><p>Спасибо, подписка оформлена</p>')
+    
+    
+                            $('#myAlert').show('fade');
+    
+                            setTimeout(function () {
+                                $('#myAlert').hide('fade');
+                            }, 4000)
+                            
+                        } else {
+                            console.log('такой емайл уже существует')
+    
+                            $('#myAlert').html('<a href="#" class="close" data-dismiss="alert">&times;</a><p>Такой Email уже существует</p>')
+    
+    
+                            $('#myAlert').show('fade');
+    
+                            setTimeout(function () {
+                                $('#myAlert').hide('fade');
+                            }, 4000)
+                        }
+                        
+    
+                    }
+                })
+    
+            })
+        });
+    </script>

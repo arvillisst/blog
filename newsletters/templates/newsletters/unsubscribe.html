@@ -1,0 +1,32 @@
+{% extends '_parts/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load thumbnail %}
+
+
+{% block content %}
+
+    {% include '_parts/header.html' %}
+
+    <!--================ Подписаться =================-->
+        <aside class="single_sidebar_widget newsletter_widget">
+            <h4 class="widget_title">Отписаться</h4>
+            <div id="mc_embed_signup">
+                <form action="" method="post" class="subscribe_form relative">
+                    {% csrf_token %}
+                    <div class="input-group d-flex flex-row">
+                        {{ form_newsletter }}
+                        <button type="submit" class="btn sub-btn" id="subscribe">
+                            <span class="lnr lnr-arrow-right"></span>
+                        </button>
+                    </div>
+                    <div class="mt-10 info"></div>
+                </form>
+            </div>
+        </aside>
+        <div class="br"></div>
+        <!--================ Подписаться =================-->
+
+{% endblock %}
+
+
