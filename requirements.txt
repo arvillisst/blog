@@ -25,6 +25,6 @@ six==1.12.0
 sqlparse==0.3.0
 typed-ast==1.3.5
 Unidecode==1.0.23
-urllib3==1.25.3
+urllib3==1.26.5
 wget==3.2
 wrapt==1.11.1
